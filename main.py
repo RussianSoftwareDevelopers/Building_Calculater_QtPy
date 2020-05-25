@@ -1,9 +1,50 @@
 import sys
-import mainWindow
-import climateZone
+import mainWindow, climateZone, afterOK, analog, countingMethod, mathOperations, technology
 from PyQt5 import QtWidgets, uic, QtCore, QtGui, QtWidgets
 
 
+
+class technologyForm(QtWidgets.QMainWindow):
+
+	def __init__(self):
+		super(technologyForm, self).__init__()
+		self.ui = technology.Ui_Dialog()
+		self.ui.setupUi(self)
+
+
+
+class mathOperationsForm(QtWidgets.QMainWindow):
+
+	def __init__(self):
+		super(mathOperationsForm, self).__init__()
+		self.ui = mathOperations.Ui_Dialog()
+		self.ui.setupUi(self)
+
+
+
+class countingMethodForm(QtWidgets.QMainWindow):
+
+	def __init__(self):
+		super(countingMethodForm, self).__init__()
+		self.ui = countingMethod.Ui_Dialog()
+		self.ui.setupUi(self)
+
+
+class analogForm(QtWidgets.QMainWindow):
+
+	def __init__(self):
+		super(analogForm, self).__init__()
+		self.ui = analog.Ui_Dialog()
+		self.ui.setupUi(self)	
+
+
+
+class afterOkForm(QtWidgets.QMainWindow):
+
+	def __init__(self):
+		super(afterOkForm, self).__init__()
+		self.ui = afterOK.Ui_Dialog()
+		self.ui.setupUi(self)	
 
 
 class climateZoneForm(QtWidgets.QMainWindow):	
@@ -52,7 +93,6 @@ class climateZoneForm(QtWidgets.QMainWindow):
 				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
 			except Exception as e:
 				print(str(e))
-
 				self.ui.lineEdit_4.setText("")
 
 
@@ -135,4 +175,6 @@ class KoefficientSetGet():
 app = QtWidgets.QApplication([])
 root = mainForm()
 root.show()
+
+
 sys.exit(app.exec())
