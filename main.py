@@ -1,6 +1,6 @@
 import sys
 import mainWindow, climateZone, afterOK, analog, countingMethod, mathOperations, technology
-from PyQt5 import QtWidgets, uic, QtCore, QtGui, QtWidgets
+from PyQt5 import QtWidgets, uic, QtCore, QtGui
 
 
 
@@ -49,7 +49,7 @@ class afterOkForm(QtWidgets.QMainWindow):
 
 class climateZoneForm(QtWidgets.QMainWindow):	
 
-	def __init__(self, koeffsignal):
+	def __init__(self):
 		super(climateZoneForm, self).__init__()
 		self.ui = climateZone.Ui_Dialog()
 		self.ui.setupUi(self)
@@ -57,8 +57,7 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.listKoef = {}
 		
 		
-		self.l=15
-		print(self.l)
+		
 		self.ui.radioButton_4.toggled.connect(self.ChangeLongBuilding)
 		self.ui.radioButton_5.toggled.connect(self.ChangeLongBuilding)
 		self.ui.radioButton_6.toggled.connect(self.ChangeLongBuilding)
@@ -71,7 +70,7 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.ui.pushButton.clicked.connect(self.ClickOk)
 
 	def ClickOk(self):
-		self.koeffsignal.emit(3, 6.0)
+		signal.emit(3, 6.0)
 
 
 	def ChangeKoefSejsm(self, statCheck):
@@ -128,6 +127,21 @@ class climateZoneForm(QtWidgets.QMainWindow):
 			print(str(e))
 
 
+class MyWidget(QtWidgets.QWidget):
+    my_signal = QtCore.pyqtSignal(int, float)
+ 
+    def __init__(self):
+        super(MyWidget, self).__init__()
+        
+ 
+        # Обработчик сигнала
+        self.my_signal.connect(self.mySignalHandler)
+ 
+    def mySignalHandler(self, data):  # Вызывается для обработки сигнала
+        print(data)
+
+
+
 class mainForm(QtWidgets.QMainWindow):
 	
 	def __init__(self):
@@ -136,17 +150,17 @@ class mainForm(QtWidgets.QMainWindow):
 		self.ui.setupUi(self)
 		self.ui.pushButton.clicked.connect(self.btnClicked)
 		koeff =  KoefficientSetGet()
-		koeffsignal = QtCore.pyqtSignal(int, float)
+		koeffsignal = MyWidget()
 		koeff.age = 3
 		self.ui.lineEdit_4.setText(str(koeff.age))
 		self.ui.lineEdit_5.setText(str(5))		
 
-		koeffsignal.connect(self.RequesKoef)
+		
 
 		   #connect(self.koeffsignal)
 
 	def btnClicked(self):	
-		self.climateZone = climateZoneForm(self.koeffsignal)
+		self.climateZone = climateZoneForm()
 		self.climateZone.show()
 		print("click")
 
