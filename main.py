@@ -1,10 +1,138 @@
-from PyQt5 import QtWidgets, uic
 import sys
+import mainWindow
+import climateZone
+from PyQt5 import QtWidgets, uic, QtCore, QtGui, QtWidgets
+
+
+
+
+class climateZoneForm(QtWidgets.QMainWindow):	
+
+	def __init__(self, koeffsignal):
+		super(climateZoneForm, self).__init__()
+		self.ui = climateZone.Ui_Dialog()
+		self.ui.setupUi(self)
+
+		self.listKoef = {}
+		
+		
+		self.l=15
+		print(self.l)
+		self.ui.radioButton_4.toggled.connect(self.ChangeLongBuilding)
+		self.ui.radioButton_5.toggled.connect(self.ChangeLongBuilding)
+		self.ui.radioButton_6.toggled.connect(self.ChangeLongBuilding)
+
+		self.ui.checkBox.clicked.connect(self.ChangeKoef1)
+		self.ui.checkBox_2.clicked.connect(self.ChangeKoef2)
+		self.ui.lineEdit_4.textEdited.connect(self.ChangeKoef1)
+		self.ui.lineEdit_2.textEdited.connect(self.ChangeKoef2)
+		self.ui.checkBox_3.clicked.connect(self.ChangeKoefSejsm)
+		self.ui.pushButton.clicked.connect(self.ClickOk)
+
+	def ClickOk(self):
+		self.koeffsignal.emit(3, 6.0)
+
+
+	def ChangeKoefSejsm(self, statCheck):
+		self.ui.label_13.setEnabled(statCheck)
+		self.ui.label_14.setEnabled(statCheck)
+		self.ui.label_15.setEnabled(statCheck)
+
+		self.ui.radioButton.setEnabled(statCheck)
+		self.ui.radioButton_2.setEnabled(statCheck)
+		self.ui.radioButton_3.setEnabled(statCheck)
+
+		 
+
+
+	def ChangeKoef1(self, statCheck):
+		if self.ui.checkBox.checkState():
+			try:
+				self.CheckValues()
+				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
+			except Exception as e:
+				print(str(e))
+
+				self.ui.lineEdit_4.setText("")
+
+
+	def ChangeKoef2(self, statCheck):
+		if self.ui.checkBox_2.checkState():
+			try:
+				self.CheckValues()
+				print(self.listKoef)
+				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
+			except:
+				self.ui.lineEdit_2.setText("")
+
+
+	def ChangeLongBuilding(self, k):
+		if k:
+			radiobutton = self.sender()
+			try:
+				self.ui.lineEdit.setText(radiobutton.text())
+				self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
+				self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
+				self.listKoef["koef3"] = float(radiobutton.text())
+				print(self.listKoef)
+				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
+			except:
+				self.ui.lineEdit_3.setText("")
+
+	def CheckValues(self):
+		try:
+			self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
+			self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
+			self.listKoef["koef3"] = float(self.ui.lineEdit.text())
+		except Exception as e:
+			print(str(e))
+
+
+class mainForm(QtWidgets.QMainWindow):
+	
+	def __init__(self):
+		super(mainForm, self).__init__()
+		self.ui = mainWindow.Ui_Dialog()
+		self.ui.setupUi(self)
+		self.ui.pushButton.clicked.connect(self.btnClicked)
+		koeff =  KoefficientSetGet()
+		koeffsignal = QtCore.pyqtSignal(int, float)
+		koeff.age = 3
+		self.ui.lineEdit_4.setText(str(koeff.age))
+		self.ui.lineEdit_5.setText(str(5))		
+
+		koeffsignal.connect(self.RequesKoef)
+
+		   #connect(self.koeffsignal)
+
+	def btnClicked(self):	
+		self.climateZone = climateZoneForm(self.koeffsignal)
+		self.climateZone.show()
+		print("click")
+
+	def RequesKoef(self, val):
+		print(val)
+
+
+class KoefficientSetGet(): 
+	def __init__(self):
+		self._age = 0
+		self._age = 0
+
+     # using property decorator 
+     # a getter function 
+	@property
+	def age(self): 
+		print("getter method called") 
+		return self._age
+		   
+	@age.setter
+	def age(self, a): 
+		self._age = a 
+  
+
 
 app = QtWidgets.QApplication([])
-win = uic.loadUi("mainWindow.ui")
-
-win.pushButton_4.text = "WWW"
-
-win.show()
+root = mainForm()
+root.show()
 sys.exit(app.exec())
