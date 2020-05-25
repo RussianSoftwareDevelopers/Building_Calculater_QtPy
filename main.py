@@ -39,23 +39,26 @@ class analogForm(QtWidgets.QMainWindow):
 
 
 
+ 
+		
+
 class afterOkForm(QtWidgets.QMainWindow):
 
 	def __init__(self):
 		super(afterOkForm, self).__init__()
 		self.ui = afterOK.Ui_Dialog()
 		self.ui.setupUi(self)	
-
+		
 
 class climateZoneForm(QtWidgets.QMainWindow):	
 
-	def __init__(self):
+	def __init__(self, signal1):
 		super(climateZoneForm, self).__init__()
 		self.ui = climateZone.Ui_Dialog()
 		self.ui.setupUi(self)
-
+		self.signal = signal1
 		self.listKoef = {}
-		
+		self.KoefSejsm = 0
 		
 		
 		self.ui.radioButton_4.toggled.connect(self.ChangeLongBuilding)
@@ -69,9 +72,19 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.ui.checkBox_3.clicked.connect(self.ChangeKoefSejsm)
 		self.ui.pushButton.clicked.connect(self.ClickOk)
 
-	def ClickOk(self):
-		signal.emit(3, 6.0)
+		self.ui.radioButton.toggled.connect(self.ChangeKoefSejsmValue)
+		self.ui.radioButton_2.toggled.connect(self.ChangeKoefSejsmValue)
+		self.ui.radioButton_3.toggled.connect(self.ChangeKoefSejsmValue)
+		self.ui.pushButton_2.clicked.connect(self.close)
 
+	def ClickOk(self):
+		try:
+			self.signal.my_signal.emit(3, float(self.ui.lineEdit_3.text()))
+			self.signal.my_signal.emit(4, float(self.KoefSejsm))
+			self.close()
+		except:
+			pass
+		
 
 	def ChangeKoefSejsm(self, statCheck):
 		self.ui.label_13.setEnabled(statCheck)
@@ -82,7 +95,12 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.ui.radioButton_2.setEnabled(statCheck)
 		self.ui.radioButton_3.setEnabled(statCheck)
 
-		 
+	def ChangeKoefSejsmValue(self, statCheck):
+		if statCheck:
+			self.KoefSejsm = self.sender().text()
+
+
+
 
 
 	def ChangeKoef1(self, statCheck):
@@ -135,10 +153,9 @@ class MyWidget(QtWidgets.QWidget):
         
  
         # Обработчик сигнала
-        self.my_signal.connect(self.mySignalHandler)
+        #self.my_signal.connect(self.mySignalHandler)
  
-    def mySignalHandler(self, data):  # Вызывается для обработки сигнала
-        print(data)
+     
 
 
 
@@ -149,40 +166,28 @@ class mainForm(QtWidgets.QMainWindow):
 		self.ui = mainWindow.Ui_Dialog()
 		self.ui.setupUi(self)
 		self.ui.pushButton.clicked.connect(self.btnClicked)
-		koeff =  KoefficientSetGet()
-		koeffsignal = MyWidget()
-		koeff.age = 3
-		self.ui.lineEdit_4.setText(str(koeff.age))
+		 
+		self.koeffsignal = MyWidget()
+		 
+		self.ui.lineEdit_4.setText(str(8))
 		self.ui.lineEdit_5.setText(str(5))		
-
+		self.koeffsignal.my_signal.connect(self.RequesKoef)
 		
 
 		   #connect(self.koeffsignal)
 
 	def btnClicked(self):	
-		self.climateZone = climateZoneForm()
+		self.climateZone = climateZoneForm(self.koeffsignal)
 		self.climateZone.show()
-		print("click")
+		 
 
-	def RequesKoef(self, val):
-		print(val)
+	def RequesKoef(self, val, rez):
+		if val==3:
+			self.ui.lineEdit_4.setText(str(rez))
+		if val==4:
+			self.ui.lineEdit_5.setText(str(rez))
 
-
-class KoefficientSetGet(): 
-	def __init__(self):
-		self._age = 0
-		self._age = 0
-
-     # using property decorator 
-     # a getter function 
-	@property
-	def age(self): 
-		print("getter method called") 
-		return self._age
-		   
-	@age.setter
-	def age(self, a): 
-		self._age = a 
+ 
   
 
 
