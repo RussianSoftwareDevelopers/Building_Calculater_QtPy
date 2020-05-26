@@ -2,7 +2,8 @@ import sys
 import mainWindow, climateZone, afterOK, analog, countingMethod, mathOperations, technology
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 
-
+#Для конвертирования .ui -> .py
+#	pyuic5 name.ui -o name.py
 
 class technologyForm(QtWidgets.QMainWindow):
 
@@ -22,10 +23,10 @@ class technologyForm(QtWidgets.QMainWindow):
 		self.ui.lineEdit.textEdited.connect(self.ChangetTextKoef1)
 		self.ui.lineEdit_2.textEdited.connect(self.ChangeTextKoef2)
 
-
 		self.FirstKoef = 0
 		self.SecondKoef = 0
 		self.TherdKoef = 0
+
 
 	def ChangetTextKoef1(self):
 		try:
@@ -33,11 +34,13 @@ class technologyForm(QtWidgets.QMainWindow):
 		except:
 			pass
 
+
 	def ChangeTextKoef2(self):
 		try:
 			self.SecondKoef = float(self.sender().text())
 		except:
 			pass
+
 
 	def FirstCheck(self, state):
 		if not state:
@@ -49,6 +52,7 @@ class technologyForm(QtWidgets.QMainWindow):
 		except:
 			pass
 
+
 	def SecondCheck(self, state):
 		if not state:
 			self.SecondKoef = 0
@@ -59,9 +63,11 @@ class technologyForm(QtWidgets.QMainWindow):
 		except:
 			pass
 
+
 	def RadioCheck(self, state):
 		if state:
 			self.TherdKoef = float(self.sender().text())
+
 
 	def ClickOk(self):
 		self.signal.my_signal.emit(5, self.FirstKoef)
@@ -69,13 +75,42 @@ class technologyForm(QtWidgets.QMainWindow):
 		self.signal.my_signal.emit(7, self.TherdKoef)
 		self.close()
 
+
 class mathOperationsForm(QtWidgets.QMainWindow):
 
-	def __init__(self):
+	def __init__(self, currentIndex):
 		super(mathOperationsForm, self).__init__()
+		self.curentIndex = currentIndex
 		self.ui = mathOperations.Ui_Dialog()
 		self.ui.setupUi(self)
 
+		self.ui.tabWidget.setCurrentIndex(self.curentIndex)
+
+		self.ui.countInterpol.clicked.connect(self.Interpolation)
+		self.ui.countExtrapol.clicked.connect(self.Extrapolation)
+
+
+	def Interpolation(self):
+		t1 = float(self.ui.lineEdit.text())
+		t2 = float(self.ui.lineEdit_2.text())
+		s = float(self.ui.lineEdit_5.text())
+		s1 = float(self.ui.lineEdit_3.text())
+		s2 = float(self.ui.lineEdit_4.text())
+
+		t = float( t1 + ( ((t2 - t1) / (s2 - s1)) * (s - s1)) )
+
+		self.ui.lineEdit_6.setText(str(t))
+
+
+	def Extrapolation(self):
+		t_min = float(self.ui.lineEdit_7.text())
+		s_min = float(self.ui.lineEdit_8.text())
+		se = float(self.ui.lineEdit_10.text())
+		alpha = float(self.ui.lineEdit_11.text())
+
+		t = float( t_min * ( (se / s_min) ** alpha ) ) 
+
+		self.ui.lineEdit_12.setText(str("%.5f" % t))
 
 
 class countingMethodForm(QtWidgets.QMainWindow):
@@ -86,12 +121,61 @@ class countingMethodForm(QtWidgets.QMainWindow):
 		self.ui.setupUi(self)
 
 
+
 class analogForm(QtWidgets.QMainWindow):
 
 	def __init__(self):
 		super(analogForm, self).__init__()
 		self.ui = analog.Ui_Dialog()
-		self.ui.setupUi(self)	
+		self.ui.setupUi(self)
+
+		self.ui.textEdit.setText("")
+
+		self.ui.har_1.clicked.connect(self.HarChecked)
+		self.ui.har_2.clicked.connect(self.HarChecked)
+		self.ui.har_3.clicked.connect(self.HarChecked)
+		self.ui.har_4.clicked.connect(self.HarChecked)
+
+		#Эти тоже надо обработать ток хз куда сохранять и пригодится ли это вообще
+		#self.ui.pl_1.clicked.connect()
+		#self.ui.pl_2.clicked.connect()
+		#self.ui.pl_3.clicked.connect()
+
+		self.ui.pushButton_3.clicked.connect(self.OpenMathFormInterpol)
+		self.ui.pushButton_4.clicked.connect(self.OpenMathFormExtrapol)
+		self.ui.pushButton_5.clicked.connect(self.OpenCountingMethodForm)
+
+		self.ui.pushButton_2.clicked.connect(app.exit)
+
+
+	def HarChecked(self):
+		self.ui.textEdit.setText("")
+		if self.ui.har_1.checkState():
+			self.ui.textEdit.append(self.ui.har_1.text())
+
+		if self.ui.har_2.checkState():
+			self.ui.textEdit.append(self.ui.har_2.text())
+
+		if self.ui.har_3.checkState():
+			self.ui.textEdit.append(self.ui.har_3.text())
+
+		if self.ui.har_4.checkState():
+			self.ui.textEdit.append(self.ui.har_4.text())
+
+
+	def OpenMathFormInterpol(self):
+		self.mathF = mathOperationsForm(0)
+		self.mathF.show()
+
+
+	def OpenMathFormExtrapol(self):
+		self.mathF = mathOperationsForm(1)
+		self.mathF.show()
+
+
+	def OpenCountingMethodForm(self):
+		self.cmf = countingMethodForm()
+		self.cmf.show()
 
 
 
@@ -100,14 +184,16 @@ class ChangeSqare(object):
         self.__square = 0
  
     @property
-    def square(self):                       # Чтение
+    def square(self):				# Чтение
         return self.__square
     @square.setter
-    def Setsquare(self, value):                # Запись
+    def Setsquare(self, value):		# Запись
         self.__square = value
     @square.deleter
-    def Delsquare(self):                       # Удаление
+    def Delsquare(self):			# Удаление
         del self.__square
+
+
 
 class afterOkForm(QtWidgets.QMainWindow):
 
@@ -121,7 +207,7 @@ class afterOkForm(QtWidgets.QMainWindow):
 		self.ui.lineEdit_2.textEdited.connect(self.EditS)
 		self.change = ChangeSqare()
 		self.ui.pushButton_3.clicked.connect(app.exit)
-		self.ui.pushButton_4.clicked.connect()
+		self.ui.pushButton_4.clicked.connect(self.openAnalogForm)
 
 
 	def EditS(self):
@@ -129,7 +215,12 @@ class afterOkForm(QtWidgets.QMainWindow):
 			self.change.Setsquare = float(self.sender().text())
 		except Exception as e:
 			pass
-		
+	
+
+	def openAnalogForm(self):
+		self.af = analogForm()
+		self.af.show()	
+
 
 
 class climateZoneForm(QtWidgets.QMainWindow):	
@@ -141,7 +232,6 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.signal = signal1
 		self.listKoef = {}
 		self.KoefSejsm = 0
-		
 		
 		self.ui.radioButton_4.toggled.connect(self.ChangeLongBuilding)
 		self.ui.radioButton_5.toggled.connect(self.ChangeLongBuilding)
@@ -158,6 +248,7 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.ui.radioButton_2.toggled.connect(self.ChangeKoefSejsmValue)
 		self.ui.radioButton_3.toggled.connect(self.ChangeKoefSejsmValue)
 		self.ui.pushButton_2.clicked.connect(self.close)
+
 
 	def ClickOk(self):
 		try:
@@ -177,12 +268,10 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		self.ui.radioButton_2.setEnabled(statCheck)
 		self.ui.radioButton_3.setEnabled(statCheck)
 
+
 	def ChangeKoefSejsmValue(self, statCheck):
 		if statCheck:
 			self.KoefSejsm = self.sender().text()
-
-
-
 
 
 	def ChangeKoef1(self, statCheck):
@@ -227,6 +316,7 @@ class climateZoneForm(QtWidgets.QMainWindow):
 			print(str(e))
 
 
+
 class MyWidget(QtWidgets.QWidget):
     my_signal = QtCore.pyqtSignal(int, float)
  
@@ -238,8 +328,6 @@ class MyWidget(QtWidgets.QWidget):
         #self.my_signal.connect(self.mySignalHandler)
  
      
-
-
 
 class mainForm(QtWidgets.QMainWindow):
 	
@@ -292,6 +380,5 @@ class mainForm(QtWidgets.QMainWindow):
 app = QtWidgets.QApplication([])
 root = mainForm()
 root.show()
-
 
 sys.exit(app.exec())
