@@ -1,4 +1,5 @@
 import sys
+import math
 import mainWindow, climateZone, afterOK, analog, countingMethod, mathOperations, technology
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 
@@ -120,6 +121,20 @@ class countingMethodForm(QtWidgets.QMainWindow):
 		self.ui = countingMethod.Ui_Dialog()
 		self.ui.setupUi(self)
 
+		self.ui.pushButton.clicked.connect(self.Count)
+
+
+	def Count(self):
+		a1 = 11.6
+		a2 = 0.2
+
+		c = float(self.ui.lineEdit_4.text())
+		if c < 0.1 or c > 1.3:
+			self.ui.lineEdit_4.setText("")
+			QtWidgets.QMessageBox.about(self, "Ошибка", "Неверное число: допустимый интервал от 0.1 до 1.3")
+			
+		tn = float((a1 * math.sqrt(c)) + (a2 * c)) 
+		self.ui.lineEdit.setText(str("%.5f" % tn))
 
 
 class analogForm(QtWidgets.QMainWindow):
