@@ -79,49 +79,63 @@ class technologyForm(QtWidgets.QMainWindow):
 
 class mathOperationsForm(QtWidgets.QMainWindow):
 
-	def __init__(self, currentIndex):
+	def __init__(self, currentIndex, signal2):
 		super(mathOperationsForm, self).__init__()
 		self.curentIndex = currentIndex
 		self.ui = mathOperations.Ui_Dialog()
 		self.ui.setupUi(self)
+		self.sig = signal2
 
 		self.ui.tabWidget.setCurrentIndex(self.curentIndex)
 
 		self.ui.countInterpol.clicked.connect(self.Interpolation)
 		self.ui.countExtrapol.clicked.connect(self.Extrapolation)
+		self.ui.lineEdit_5.setText(str(SaveValues.p))
 
 
 	def Interpolation(self):
-		t1 = float(self.ui.lineEdit.text())
-		t2 = float(self.ui.lineEdit_2.text())
-		s = float(self.ui.lineEdit_5.text())
-		s1 = float(self.ui.lineEdit_3.text())
-		s2 = float(self.ui.lineEdit_4.text())
-
-		t = float( t1 + ( ((t2 - t1) / (s2 - s1)) * (s - s1)) )
-
-		self.ui.lineEdit_6.setText(str(t))
-
+		try:
+			t1 = float(self.ui.lineEdit.text())
+			t2 = float(self.ui.lineEdit_2.text())
+			s = float(SaveValues.p)
+			s1 = float(self.ui.lineEdit_3.text())
+			s2 = float(self.ui.lineEdit_4.text())
+			t = float( t1 + ( ((t2 - t1) / (s2 - s1)) * (s - s1)) )
+			self.sig.my_signal.emit(8, t)
+			self.ui.lineEdit_6.setText(str(t))
+		except Exception as e:
+			print(str(e))
 
 	def Extrapolation(self):
-		t_min = float(self.ui.lineEdit_7.text())
-		s_min = float(self.ui.lineEdit_8.text())
-		se = float(self.ui.lineEdit_10.text())
-		alpha = float(self.ui.lineEdit_11.text())
-
-		t = float( t_min * ( (se / s_min) ** alpha ) ) 
-
-		self.ui.lineEdit_12.setText(str("%.5f" % t))
-
+		try:
+			t_min = float(self.ui.lineEdit_7.text())
+			s_min = float(self.ui.lineEdit_8.text())
+			se = float(self.ui.lineEdit_10.text())
+			alpha = float(self.ui.lineEdit_11.text())
+			t = float( t_min * ( (se / s_min) ** alpha ) )
+			self.ui.lineEdit_12.setText(str("%.5f" % t))
+			self.sig.my_signal.emit(9, t)
+		except Exception as e:
+			print(str(e))
 
 class countingMethodForm(QtWidgets.QMainWindow):
 
-	def __init__(self):
+	def __init__(self, signal1):
 		super(countingMethodForm, self).__init__()
 		self.ui = countingMethod.Ui_Dialog()
 		self.ui.setupUi(self)
-
+		self.ui.pushButton_2.clicked.connect(self.close)
 		self.ui.pushButton.clicked.connect(self.Count)
+		self.ui.comboBox.currentIndexChanged.connect(self.cb_changed)
+		self.sig = signal1
+
+	def cb_changed(self, index):
+		if index==0:
+			self.ui.lineEdit_2.setText("")
+			self.ui.lineEdit_3.setText("")
+		if index==1:
+			self.ui.lineEdit_2.setText("Электроэнергетика")
+			self.ui.lineEdit_3.setText("Электроподстанции")
 
 
 	def Count(self):
@@ -135,6 +149,7 @@ class countingMethodForm(QtWidgets.QMainWindow):
 			
 		tn = float((a1 * math.sqrt(c)) + (a2 * c)) 
 		self.ui.lineEdit.setText(str("%.5f" % tn))
+		self.sig.my_signal.emit(10, tn)
 
 
 class analogForm(QtWidgets.QMainWindow):
@@ -145,23 +160,33 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.setupUi(self)
 
 		self.ui.textEdit.setText("")
-
+		self.koeffsignal = MyWidget()
+		self.koeffsignal.my_signal.connect(self.RequesKoef)
 		self.ui.har_1.clicked.connect(self.HarChecked)
 		self.ui.har_2.clicked.connect(self.HarChecked)
 		self.ui.har_3.clicked.connect(self.HarChecked)
 		self.ui.har_4.clicked.connect(self.HarChecked)
-
+		
 		#Эти тоже надо обработать ток хз куда сохранять и пригодится ли это вообще
 		#self.ui.pl_1.clicked.connect()
 		#self.ui.pl_2.clicked.connect()
 		#self.ui.pl_3.clicked.connect()
-
+		
 		self.ui.pushButton_3.clicked.connect(self.OpenMathFormInterpol)
 		self.ui.pushButton_4.clicked.connect(self.OpenMathFormExtrapol)
 		self.ui.pushButton_5.clicked.connect(self.OpenCountingMethodForm)
 
 		self.ui.pushButton_2.clicked.connect(app.exit)
+		
 
+
+	def RequesKoef(self, val, rez):
+		if val==8:
+			self.ui.lineEdit_2.setText(str(rez))
+		if val==9:
+			self.ui.lineEdit_3.setText(str(rez))
+		if val==10:
+			self.ui.lineEdit_4.setText(str(rez))
 
 	def HarChecked(self):
 		self.ui.textEdit.setText("")
@@ -179,34 +204,43 @@ class analogForm(QtWidgets.QMainWindow):
 
 
 	def OpenMathFormInterpol(self):
-		self.mathF = mathOperationsForm(0)
+		self.mathF = mathOperationsForm(0, self.koeffsignal)
 		self.mathF.show()
 
 
 	def OpenMathFormExtrapol(self):
-		self.mathF = mathOperationsForm(1)
+		self.mathF = mathOperationsForm(1, self.koeffsignal)
 		self.mathF.show()
 
 
 	def OpenCountingMethodForm(self):
-		self.cmf = countingMethodForm()
+		self.cmf = countingMethodForm(self.koeffsignal)
 		self.cmf.show()
 
 
 
-class ChangeSqare(object):  
-    def __init__(self):
-        self.__square = 0
- 
-    @property
-    def square(self):				# Чтение
-        return self.__square
-    @square.setter
-    def Setsquare(self, value):		# Запись
-        self.__square = value
-    @square.deleter
-    def Delsquare(self):			# Удаление
-        del self.__square
+class SaveValues(object):
+	p = 0
+	intepolyatsya = 0
+
+
+class ChangeSqare(object):
+	def __init__(self):
+		self.__square = 0
+
+
+	 
+	@property
+	def square(self):				# Чтение
+		return self.__square
+
+	@square.setter
+	def Setsquare(self, value):		# Запись
+		self.__square = value
+
+	@square.deleter
+	def Delsquare(self):			# Удаление
+		del self.__square
 
 
 
@@ -227,9 +261,10 @@ class afterOkForm(QtWidgets.QMainWindow):
 
 	def EditS(self):
 		try:
-			self.change.Setsquare = float(self.sender().text())
+			SaveValues.p = float(self.sender().text())
+			 
 		except Exception as e:
-			pass
+			print(str(e))
 	
 
 	def openAnalogForm(self):
@@ -372,7 +407,7 @@ class mainForm(QtWidgets.QMainWindow):
 		self.name1 = self.ui.lineEdit.text()
 		self.place = self.ui.lineEdit_2.text()
 		self.afterok = afterOkForm(self.name1, self.place)
-		self.afterok.show()		
+		self.afterok.show()
 
 
 	def RequesKoef(self, val, rez):
