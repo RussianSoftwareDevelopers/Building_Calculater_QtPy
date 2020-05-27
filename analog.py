@@ -179,7 +179,7 @@ class Ui_Dialog(object):
         self.comboBox_2.setItemText(3, _translate("Dialog", "Магазин специализированный"))
         self.comboBox_2.setItemText(4, _translate("Dialog", "Хлеб кондитерский "))
         self.comboBox_2.setItemText(5, _translate("Dialog", "Магазин заказов"))
-        self.label_3.setText(_translate("Dialog", " Здание 16 этажное"))
+        self.label_3.setText(_translate("Dialog", ""))
         self.label_2.setText(_translate("Dialog", "Объект "))
         self.har_1.setText(_translate("Dialog", "Крупнопанельное"))
         self.har_2.setText(_translate("Dialog", "Каркасно-панельное"))

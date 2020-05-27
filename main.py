@@ -177,8 +177,13 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.pushButton_5.clicked.connect(self.OpenCountingMethodForm)
 
 		self.ui.pushButton_2.clicked.connect(app.exit)
-		
+		self.ui.comboBox.currentIndexChanged.connect(self.cb_changed)
 
+	def cb_changed(self, index):
+		
+		if index==10:
+			self.ui.label_3.setText("Здание 16 этажное")
+			print(index)
 
 	def RequesKoef(self, val, rez):
 		if val==8:
