@@ -77,6 +77,7 @@ class technologyForm(QtWidgets.QMainWindow):
 		self.close()
 
 
+
 class mathOperationsForm(QtWidgets.QMainWindow):
 
 	def __init__(self, currentIndex, signal2):
@@ -118,6 +119,8 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 		except Exception as e:
 			print(str(e))
 
+
+
 class countingMethodForm(QtWidgets.QMainWindow):
 
 	def __init__(self, signal1):
@@ -136,20 +139,30 @@ class countingMethodForm(QtWidgets.QMainWindow):
 		if index==1:
 			self.ui.lineEdit_2.setText("Электроэнергетика")
 			self.ui.lineEdit_3.setText("Электроподстанции")
+			self.ui.label_4.setText(" 11.6")
+			self.ui.label_17.setText(" 0.2")
+			self.ui.label_18.setText(" 0.1")
+			self.ui.label_19.setText(" 1.3")
+
 
 
 	def Count(self):
 		a1 = 11.6
 		a2 = 0.2
 
-		c = float(self.ui.lineEdit_4.text())
-		if c < 0.1 or c > 1.3:
-			self.ui.lineEdit_4.setText("")
-			QtWidgets.QMessageBox.about(self, "Ошибка", "Неверное число: допустимый интервал от 0.1 до 1.3")
+		try:
+			c = float(self.ui.lineEdit_4.text())
+			if c < 0.1 or c > 1.3:
+				self.ui.lineEdit_4.setText("")
+				QtWidgets.QMessageBox.about(self, "Ошибка", "Неверное число: допустимый интервал от 0.1 до 1.3")
+				return
 			
-		tn = float((a1 * math.sqrt(c)) + (a2 * c)) 
-		self.ui.lineEdit.setText(str("%.5f" % tn))
-		self.sig.my_signal.emit(10, tn)
+			tn = float((a1 * math.sqrt(c)) + (a2 * c)) 
+			self.ui.lineEdit.setText(str("%.5f" % tn))
+			self.sig.my_signal.emit(10, tn)
+		except Exception as e:
+			print(str(e))
+
 
 
 class analogForm(QtWidgets.QMainWindow):
@@ -185,6 +198,7 @@ class analogForm(QtWidgets.QMainWindow):
 			self.ui.label_3.setText("Здание 16 этажное")
 			print(index)
 
+
 	def RequesKoef(self, val, rez):
 		if val==8:
 			self.ui.lineEdit_2.setText(str(rez))
@@ -192,6 +206,7 @@ class analogForm(QtWidgets.QMainWindow):
 			self.ui.lineEdit_3.setText(str(rez))
 		if val==10:
 			self.ui.lineEdit_4.setText(str(rez))
+
 
 	def HarChecked(self):
 		self.ui.textEdit.setText("")
@@ -229,19 +244,22 @@ class SaveValues(object):
 	intepolyatsya = 0
 
 
+
 class ChangeSqare(object):
+
 	def __init__(self):
 		self.__square = 0
-
 
 	 
 	@property
 	def square(self):				# Чтение
 		return self.__square
 
+
 	@square.setter
 	def Setsquare(self, value):		# Запись
 		self.__square = value
+
 
 	@square.deleter
 	def Delsquare(self):			# Удаление
@@ -362,6 +380,7 @@ class climateZoneForm(QtWidgets.QMainWindow):
 			except:
 				self.ui.lineEdit_3.setText("")
 
+
 	def CheckValues(self):
 		try:
 			self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
@@ -377,8 +396,6 @@ class MyWidget(QtWidgets.QWidget):
  
     def __init__(self):
         super(MyWidget, self).__init__()
-        
- 
         # Обработчик сигнала
         #self.my_signal.connect(self.mySignalHandler)
  
@@ -393,13 +410,13 @@ class mainForm(QtWidgets.QMainWindow):
 		self.ui.pushButton.clicked.connect(self.btnClicked)
 		 
 		self.koeffsignal = MyWidget()
-		 
-		#self.ui.lineEdit_4.setText(str(8))
-		#self.ui.lineEdit_5.setText(str(5))		
+		 		
 		self.koeffsignal.my_signal.connect(self.RequesKoef)
 		self.ui.pushButton_2.clicked.connect(self.btnClicked2)
 		self.ui.pushButton_3.clicked.connect(self.btnClickOk)
+		self.ui.pushButton_4.clicked.connect(self.close)
 		    
+
 	def btnClicked(self):	
 		self.climateZone = climateZoneForm(self.koeffsignal)
 		self.climateZone.show()
@@ -430,7 +447,6 @@ class mainForm(QtWidgets.QMainWindow):
 			print(rez)
 			self.ui.lineEdit_7.setText(str(rez))
   
-
 
 app = QtWidgets.QApplication([])
 root = mainForm()

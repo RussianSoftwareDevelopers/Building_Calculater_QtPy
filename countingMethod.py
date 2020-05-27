@@ -8,9 +8,17 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import sys, os
 
 class Ui_Dialog(object):
+    def resource_path(self, relative):
+
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative)
+        else:
+            return os.path.join(os.path.abspath("."), relative)
+
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(568, 482)
@@ -68,7 +76,7 @@ class Ui_Dialog(object):
         self.label_7 = QtWidgets.QLabel(self.scrollAreaWidgetContents_3)
         self.label_7.setGeometry(QtCore.QRect(10, 0, 181, 41))
         self.label_7.setText("")
-        self.label_7.setPixmap(QtGui.QPixmap("../../GitHub/Building_Calculater_QtPy/countingMethod.PNG"))
+        self.label_7.setPixmap(QtGui.QPixmap(self.resource_path("countingMethod.PNG")))
         self.label_7.setObjectName("label_7")
         self.scrollArea_3.setWidget(self.scrollAreaWidgetContents_3)
         self.label_6 = QtWidgets.QLabel(self.scrollAreaWidgetContents_2)
@@ -97,6 +105,9 @@ class Ui_Dialog(object):
         self.scrollAreaWidgetContents_8 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_8.setGeometry(QtCore.QRect(0, 0, 29, 19))
         self.scrollAreaWidgetContents_8.setObjectName("scrollAreaWidgetContents_8")
+        self.label_4 = QtWidgets.QLabel(self.scrollAreaWidgetContents_8)
+        self.label_4.setGeometry(QtCore.QRect(0, 0, 31, 16))
+        self.label_4.setObjectName("label_4")
         self.scrollArea_8.setWidget(self.scrollAreaWidgetContents_8)
         self.label_12 = QtWidgets.QLabel(self.scrollAreaWidgetContents_17)
         self.label_12.setGeometry(QtCore.QRect(80, 10, 21, 21))
@@ -108,6 +119,9 @@ class Ui_Dialog(object):
         self.scrollAreaWidgetContents_7 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_7.setGeometry(QtCore.QRect(0, 0, 29, 19))
         self.scrollAreaWidgetContents_7.setObjectName("scrollAreaWidgetContents_7")
+        self.label_17 = QtWidgets.QLabel(self.scrollAreaWidgetContents_7)
+        self.label_17.setGeometry(QtCore.QRect(0, 0, 31, 16))
+        self.label_17.setObjectName("label_17")
         self.scrollArea_7.setWidget(self.scrollAreaWidgetContents_7)
         self.scrollArea_13.setWidget(self.scrollAreaWidgetContents_17)
         self.scrollArea_14 = QtWidgets.QScrollArea(self.scrollAreaWidgetContents_2)
@@ -127,6 +141,9 @@ class Ui_Dialog(object):
         self.scrollAreaWidgetContents_16 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_16.setGeometry(QtCore.QRect(0, 0, 29, 19))
         self.scrollAreaWidgetContents_16.setObjectName("scrollAreaWidgetContents_16")
+        self.label_19 = QtWidgets.QLabel(self.scrollAreaWidgetContents_16)
+        self.label_19.setGeometry(QtCore.QRect(0, 0, 31, 16))
+        self.label_19.setObjectName("label_19")
         self.scrollArea_12.setWidget(self.scrollAreaWidgetContents_16)
         self.label_15 = QtWidgets.QLabel(self.scrollAreaWidgetContents_18)
         self.label_15.setGeometry(QtCore.QRect(90, 10, 41, 21))
@@ -138,6 +155,9 @@ class Ui_Dialog(object):
         self.scrollAreaWidgetContents_15 = QtWidgets.QWidget()
         self.scrollAreaWidgetContents_15.setGeometry(QtCore.QRect(0, 0, 29, 19))
         self.scrollAreaWidgetContents_15.setObjectName("scrollAreaWidgetContents_15")
+        self.label_18 = QtWidgets.QLabel(self.scrollAreaWidgetContents_15)
+        self.label_18.setGeometry(QtCore.QRect(0, 0, 31, 16))
+        self.label_18.setObjectName("label_18")
         self.scrollArea_11.setWidget(self.scrollAreaWidgetContents_15)
         self.scrollArea_14.setWidget(self.scrollAreaWidgetContents_18)
         self.scrollArea_2.setWidget(self.scrollAreaWidgetContents_2)
@@ -192,9 +212,13 @@ class Ui_Dialog(object):
         self.label_10.setText(_translate("Dialog", "Значение коэффициентов"))
         self.label_13.setText(_translate("Dialog", "Интервал объемов СМР, млн. руб"))
         self.label_11.setText(_translate("Dialog", "А1"))
+        self.label_4.setText(_translate("Dialog", ""))
         self.label_12.setText(_translate("Dialog", "А2"))
+        self.label_17.setText(_translate("Dialog", ""))
         self.label_14.setText(_translate("Dialog", "мин."))
+        self.label_19.setText(_translate("Dialog", ""))
         self.label_15.setText(_translate("Dialog", "макс."))
+        self.label_18.setText(_translate("Dialog", ""))
         self.pushButton.setText(_translate("Dialog", "Расчет"))
         self.comboBox.setCurrentText(_translate("Dialog", "Электроэнергетика"))
         self.comboBox.setItemText(0, _translate("Dialog", "Электроэнергетика"))

@@ -8,9 +8,16 @@
 
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
+import sys, os
 
 class Ui_Dialog(object):
+    def resource_path(self, relative):
+
+        if hasattr(sys, '_MEIPASS'):
+            return os.path.join(sys._MEIPASS, relative)
+        else:
+            return os.path.join(os.path.abspath("."), relative)
+
     def setupUi(self, Dialog):
         Dialog.setObjectName("Dialog")
         Dialog.resize(581, 583)
@@ -22,7 +29,7 @@ class Ui_Dialog(object):
         self.image_1 = QtWidgets.QLabel(self.tab)
         self.image_1.setGeometry(QtCore.QRect(30, 0, 501, 211))
         self.image_1.setText("")
-        self.image_1.setPixmap(QtGui.QPixmap("../../GitHub/Building_Calculater_QtPy/interpolation.PNG"))
+        self.image_1.setPixmap(QtGui.QPixmap(self.resource_path("interpolation.PNG")))
         self.image_1.setObjectName("image_1")
         self.label_2 = QtWidgets.QLabel(self.tab)
         self.label_2.setGeometry(QtCore.QRect(10, 250, 41, 21))
@@ -140,7 +147,7 @@ class Ui_Dialog(object):
         self.image_2 = QtWidgets.QLabel(self.tab_2)
         self.image_2.setGeometry(QtCore.QRect(0, 0, 561, 361))
         self.image_2.setText("")
-        self.image_2.setPixmap(QtGui.QPixmap("../../GitHub/Building_Calculater_QtPy/extrapolation.PNG"))
+        self.image_2.setPixmap(QtGui.QPixmap(self.resource_path("extrapolation.PNG")))
         self.image_2.setObjectName("image_2")
         self.countExtrapol = QtWidgets.QPushButton(self.tab_2)
         self.countExtrapol.setGeometry(QtCore.QRect(220, 380, 81, 41))
