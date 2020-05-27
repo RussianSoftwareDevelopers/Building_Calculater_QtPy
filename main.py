@@ -195,6 +195,10 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.pushButton_4.clicked.connect(self.OpenMathFormExtrapol)
 		self.ui.pushButton_5.clicked.connect(self.OpenCountingMethodForm)
 
+		self.ui.pl_1.toggled.connect(self.radioChenge)
+		self.ui.pl_2.toggled.connect(self.radioChenge)
+		self.ui.pl_3.toggled.connect(self.radioChenge)
+
 		self.ui.pushButton_2.clicked.connect(app.exit)
 		self.ui.comboBox.currentIndexChanged.connect(self.cb_changed)
 
@@ -213,13 +217,27 @@ class analogForm(QtWidgets.QMainWindow):
 		if val==10:
 			self.ui.lineEdit_4.setText(str("%.2f" % rez))
 
+	def radioChenge(self):
+		if self.ui.har_1.checkState():
+			self.CheckRbts()
+
+
+	def CheckRbts(self):
+		if self.ui.pl_1.isChecked():
+			self.ui.label_8.setText("8,00")
+		if self.ui.pl_2.isChecked():
+			self.ui.label_8.setText("9,00")
+		if self.ui.pl_3.isChecked():
+			self.ui.label_8.setText("9,50")	
 
 	def HarChecked(self):
 		self.ui.textEdit.setText("")
 		if self.ui.har_1.checkState():
+			self.CheckRbts()
 			self.ui.textEdit.append(self.ui.har_1.text())
-			if self.ui.pl_1.checkState():
-				
+		else:
+			self.ui.label_8.setText("")
+
 
 		if self.ui.har_2.checkState():
 			self.ui.textEdit.append(self.ui.har_2.text())
