@@ -3,16 +3,21 @@ import math
 import mainWindow, climateZone, afterOK, analog, countingMethod, mathOperations, technology
 from PyQt5 import QtWidgets, uic, QtCore, QtGui
 
-#Для конвертирования .ui -> .py
-#	pyuic5 name.ui -o name.py
+
 def ConverFromComma(val):
-		if ',' in val:
-			return val.replace(',', '.')
-		else:
-			return val
+	""" 
+	Функция обрабатывает ошибки при вводе дробных чиесл: замена запятой на точку 
+	"""
+	if ',' in val:
+		return val.replace(',', '.')
+	else:
+		return val
 
 class technologyForm(QtWidgets.QMainWindow):
-
+	"""
+	Класс отвечает за окно приложения "Технология строительства"
+	и за обработку действий пользователя на этом окне
+	"""
 	def __init__(self, signal1):
 		super(technologyForm, self).__init__()
 		self.ui = technology.Ui_Dialog()
@@ -84,6 +89,10 @@ class technologyForm(QtWidgets.QMainWindow):
 
 
 class mathOperationsForm(QtWidgets.QMainWindow):
+	"""
+	Класс отвечает за окно "Вычисления"
+	и выполняет подсчет с помощью интерполяции и экстраполяции
+	"""
 
 	def __init__(self, currentIndex, signal2):
 		super(mathOperationsForm, self).__init__()
@@ -100,6 +109,7 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 
 
 	def Interpolation(self):
+		""" Функция интерполяции """
 		try:
 			t1 = float(ConverFromComma(self.ui.lineEdit.text()))
 			t2 = float(ConverFromComma(self.ui.lineEdit_2.text()))
@@ -112,7 +122,9 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 		except Exception as e:
 			print(str(e))
 
+
 	def Extrapolation(self):
+		""" Функция экстраполяции """
 		try:
 			t_min = float(ConverFromComma(self.ui.lineEdit_7.text()))
 			s_min = float(ConverFromComma(self.ui.lineEdit_8.text()))
@@ -126,9 +138,11 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 
 
 
-
 class countingMethodForm(QtWidgets.QMainWindow):
-
+	"""
+	Класс отвечает за окно "Рвсчетный метод"
+	и выполняет соответствующие вычисления
+	"""
 	def __init__(self, signal1):
 		super(countingMethodForm, self).__init__()
 		self.ui = countingMethod.Ui_Dialog()
@@ -137,6 +151,7 @@ class countingMethodForm(QtWidgets.QMainWindow):
 		self.ui.pushButton.clicked.connect(self.Count)
 		self.ui.comboBox.currentIndexChanged.connect(self.cb_changed)
 		self.sig = signal1
+
 
 	def cb_changed(self, index):
 		if index==0:
@@ -151,13 +166,13 @@ class countingMethodForm(QtWidgets.QMainWindow):
 			self.ui.label_19.setText(" 1.3")
 
 
-
 	def Count(self):
+		""" Функция расчетного метода """
 		a1 = 11.6
 		a2 = 0.2
 
 		try:
-			c = float(self.ui.lineEdit_4.text())
+			c = float(ConverFromComma(self.ui.lineEdit_4.text()))
 			if c < 0.1 or c > 1.3:
 				self.ui.lineEdit_4.setText("")
 				QtWidgets.QMessageBox.about(self, "Ошибка", "Неверное число: допустимый интервал от 0.1 до 1.3")
@@ -172,7 +187,10 @@ class countingMethodForm(QtWidgets.QMainWindow):
 
 
 class analogForm(QtWidgets.QMainWindow):
-
+	"""
+	Класс отвечает за окно "Выбор объекта аналога"
+	из него осуществляется переход к окнам для вычисления продолжительности строительства
+	"""
 	def __init__(self):
 		super(analogForm, self).__init__()
 		self.ui = analog.Ui_Dialog()
@@ -185,12 +203,8 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.har_2.clicked.connect(self.HarChecked)
 		self.ui.har_3.clicked.connect(self.HarChecked)
 		self.ui.har_4.clicked.connect(self.HarChecked)
-		
-		#Эти тоже надо обработать ток хз куда сохранять и пригодится ли это вообще
-		#self.ui.pl_1.clicked.connect()
-		#self.ui.pl_2.clicked.connect()
-		#self.ui.pl_3.clicked.connect()
-		
+			
+		self.ui.pushButton.clicked.connect(self.CountBuildingLong)
 		self.ui.pushButton_3.clicked.connect(self.OpenMathFormInterpol)
 		self.ui.pushButton_4.clicked.connect(self.OpenMathFormExtrapol)
 		self.ui.pushButton_5.clicked.connect(self.OpenCountingMethodForm)
@@ -201,6 +215,7 @@ class analogForm(QtWidgets.QMainWindow):
 
 		self.ui.pushButton_2.clicked.connect(app.exit)
 		self.ui.comboBox.currentIndexChanged.connect(self.cb_changed)
+
 
 	def cb_changed(self, index):
 		
@@ -217,6 +232,7 @@ class analogForm(QtWidgets.QMainWindow):
 		if val==10:
 			self.ui.lineEdit_4.setText(str("%.2f" % rez))
 
+
 	def radioChenge(self):
 		if self.ui.har_1.checkState():
 			self.CheckRbts()
@@ -229,6 +245,7 @@ class analogForm(QtWidgets.QMainWindow):
 			self.ui.label_8.setText("9,00")
 		if self.ui.pl_3.isChecked():
 			self.ui.label_8.setText("9,50")	
+
 
 	def HarChecked(self):
 		self.ui.textEdit.setText("")
@@ -264,6 +281,9 @@ class analogForm(QtWidgets.QMainWindow):
 		self.cmf.show()
 
 
+	def CountBuildingLong(self):
+		self.ui.lineEdit_6.setText(str(int(self.ui.lineEdit_5.text()) / 10))
+
 
 class SaveValues(object):
 	p = 0
@@ -272,7 +292,7 @@ class SaveValues(object):
 
 
 class ChangeSqare(object):
-
+	""" Служебный класс для передачи значений между окнами """
 	def __init__(self):
 		self.__square = 0
 
@@ -294,7 +314,10 @@ class ChangeSqare(object):
 
 
 class afterOkForm(QtWidgets.QMainWindow):
-
+	"""
+	Класс отвечает за окно "Объект"
+	и обрабатывает действия пользоваеля 
+	"""
 	def __init__(self, name, place):
 		super(afterOkForm, self).__init__()
 		self.ui = afterOK.Ui_Dialog()
@@ -323,7 +346,11 @@ class afterOkForm(QtWidgets.QMainWindow):
 
 
 class climateZoneForm(QtWidgets.QMainWindow):	
-
+	"""
+	Класс отвечает за окно "Природно-климатические условия"
+	собирает выбранные пользователем коэффициенты 
+	и передает их в главное окно
+	"""
 	def __init__(self, signal1):
 		super(climateZoneForm, self).__init__()
 		self.ui = climateZone.Ui_Dialog()
@@ -416,14 +443,6 @@ class climateZoneForm(QtWidgets.QMainWindow):
 				self.ui.lineEdit_3.setText("")
 				QtWidgets.QMessageBox.about(self, "Ошибка", "Введите значение")
 
-	# def CheckValues(self):
-	# 	try:
-	# 		self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
-	# 		self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
-	# 		self.listKoef["koef3"] = float(self.ui.lineEdit.text())
-	# 	except Exception as e:
-	# 		print(str(e))
-
 
 
 class MyWidget(QtWidgets.QWidget):
@@ -431,13 +450,14 @@ class MyWidget(QtWidgets.QWidget):
  
     def __init__(self):
         super(MyWidget, self).__init__()
-        # Обработчик сигнала
-        #self.my_signal.connect(self.mySignalHandler)
- 
+
      
 
 class mainForm(QtWidgets.QMainWindow):
-	
+	""" 
+	Основное окно программы
+	класс обрабатывает действия пользователя на этом окне
+	"""
 	def __init__(self):
 		super(mainForm, self).__init__()
 		self.ui = mainWindow.Ui_Dialog()
