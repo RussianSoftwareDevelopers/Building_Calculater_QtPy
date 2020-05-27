@@ -39,9 +39,7 @@ class Ui_Dialog(object):
         self.pushButton_5 = QtWidgets.QPushButton(Dialog)
         self.pushButton_5.setGeometry(QtCore.QRect(500, 20, 75, 21))
         self.pushButton_5.setObjectName("pushButton_5")
-        self.pushButton = QtWidgets.QPushButton(Dialog)
-        self.pushButton.setGeometry(QtCore.QRect(10, 350, 241, 23))
-        self.pushButton.setObjectName("pushButton")
+
         self.pushButton_4 = QtWidgets.QPushButton(Dialog)
         self.pushButton_4.setGeometry(QtCore.QRect(240, 180, 131, 41))
         self.pushButton_4.setObjectName("pushButton_4")
@@ -93,7 +91,7 @@ class Ui_Dialog(object):
         self.label_4.setText(_translate("Dialog", "Технические характеристики:"))
         self.pushButton_3.setText(_translate("Dialog", "Выход"))
         self.pushButton_5.setText(_translate("Dialog", "Изменить "))
-        self.pushButton.setText(_translate("Dialog", "Продолжительньсть строительства и задел"))
+         
         self.pushButton_4.setText(_translate("Dialog", "Нормативная база"))
         self.label_7.setText(_translate("Dialog", "Технический подвал"))
         self.label_5.setText(_translate("Dialog", "Этажность: "))

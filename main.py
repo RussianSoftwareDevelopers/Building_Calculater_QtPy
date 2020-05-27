@@ -225,6 +225,11 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.pushButton_2.clicked.connect(app.exit)
 		self.ui.comboBox.currentIndexChanged.connect(self.cb_changed)
 
+		self.ui.pushButton_6.clicked.connect(self.calculate)
+
+	def calculate(self):
+		print("calculate")
+
 
 	def cb_changed(self, index):
 		self.ui.label_3.setText(self.sender().currentText())
@@ -298,6 +303,12 @@ class analogForm(QtWidgets.QMainWindow):
 class SaveValues(object):
 	p = 0
 	intepolyatsya = 0
+
+	pku = 0
+	sejs = 0
+	objlitemk = 0
+	objblockmet = 0
+	smennost = 0
 
 
 
@@ -493,9 +504,25 @@ class mainForm(QtWidgets.QMainWindow):
 	def btnClickOk(self):	
 		self.name1 = self.ui.lineEdit.text()
 		self.place = self.ui.lineEdit_2.text()
+		
+		SaveValues.pku = self.toFloat(self.ui.lineEdit_4.text())
+		SaveValues.sejs = self.toFloat(self.ui.lineEdit_5.text())
+		SaveValues.objlitemk = self.toFloat(self.ui.lineEdit_6.text())
+		SaveValues.objblockmet = self.toFloat(self.ui.lineEdit_8.text())
+		SaveValues.smennost = self.toFloat(self.ui.label_7.text())
+
+		
+
+
 		self.afterok = afterOkForm(self.name1, self.place)
 		self.afterok.show()
 
+
+	def toFloat(self, text):
+		try:
+			return float(ConverFromComma(text))
+		except:
+			return 0
 
 	def RequesKoef(self, val, rez):
 		if val==3:
