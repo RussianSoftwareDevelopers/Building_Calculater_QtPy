@@ -240,11 +240,11 @@ class analogForm(QtWidgets.QMainWindow):
 
 	def CheckRbts(self):
 		if self.ui.pl_1.isChecked():
-			self.ui.label_8.setText("8,00")
+			self.ui.label_8.setText(" 8,00")
 		if self.ui.pl_2.isChecked():
-			self.ui.label_8.setText("9,00")
+			self.ui.label_8.setText(" 9,00")
 		if self.ui.pl_3.isChecked():
-			self.ui.label_8.setText("9,50")	
+			self.ui.label_8.setText(" 9,50")	
 
 
 	def HarChecked(self):
