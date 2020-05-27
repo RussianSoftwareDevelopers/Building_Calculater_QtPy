@@ -106,6 +106,15 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 		self.ui.countInterpol.clicked.connect(self.Interpolation)
 		self.ui.countExtrapol.clicked.connect(self.Extrapolation)
 		self.ui.lineEdit_5.setText(str(SaveValues.p))
+		self.ui.lineEdit_5.textChanged.connect(self.changeS)
+
+
+	def changeS(self):
+		try:
+			SaveValues.p = float(ConverFromComma(self.sender().text()))
+
+		except:
+			pass
 
 
 	def Interpolation(self):
@@ -118,7 +127,7 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 			s2 = float(ConverFromComma(self.ui.lineEdit_4.text()))
 			t = float( t1 + ( ((t2 - t1) / (s2 - s1)) * (s - s1)) )
 			self.sig.my_signal.emit(8, t)
-			self.ui.lineEdit_6.setText(str("%.2f" % t))
+			self.ui.lineEdit_6.setText(str("%.1f" % t))
 		except Exception as e:
 			print(str(e))
 
@@ -218,10 +227,8 @@ class analogForm(QtWidgets.QMainWindow):
 
 
 	def cb_changed(self, index):
-		
-		if index==10:
-			self.ui.label_3.setText("Здание 16 этажное")
-			print(index)
+		self.ui.label_3.setText(self.sender().currentText())
+		print(index)
 
 
 	def RequesKoef(self, val, rez):
