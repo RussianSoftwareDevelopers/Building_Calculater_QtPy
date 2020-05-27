@@ -5,6 +5,11 @@ from PyQt5 import QtWidgets, uic, QtCore, QtGui
 
 #Для конвертирования .ui -> .py
 #	pyuic5 name.ui -o name.py
+def ConverFromComma(val):
+		if ',' in val:
+			return val.replace(',', '.')
+		else:
+			return val
 
 class technologyForm(QtWidgets.QMainWindow):
 
@@ -96,28 +101,29 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 
 	def Interpolation(self):
 		try:
-			t1 = float(self.ui.lineEdit.text())
-			t2 = float(self.ui.lineEdit_2.text())
+			t1 = float(ConverFromComma(self.ui.lineEdit.text()))
+			t2 = float(ConverFromComma(self.ui.lineEdit_2.text()))
 			s = float(SaveValues.p)
-			s1 = float(self.ui.lineEdit_3.text())
-			s2 = float(self.ui.lineEdit_4.text())
+			s1 = float(ConverFromComma(self.ui.lineEdit_3.text()))
+			s2 = float(ConverFromComma(self.ui.lineEdit_4.text()))
 			t = float( t1 + ( ((t2 - t1) / (s2 - s1)) * (s - s1)) )
 			self.sig.my_signal.emit(8, t)
-			self.ui.lineEdit_6.setText(str(t))
+			self.ui.lineEdit_6.setText(str("%.2f" % t))
 		except Exception as e:
 			print(str(e))
 
 	def Extrapolation(self):
 		try:
-			t_min = float(self.ui.lineEdit_7.text())
-			s_min = float(self.ui.lineEdit_8.text())
-			se = float(self.ui.lineEdit_10.text())
-			alpha = float(self.ui.lineEdit_11.text())
+			t_min = float(ConverFromComma(self.ui.lineEdit_7.text()))
+			s_min = float(ConverFromComma(self.ui.lineEdit_8.text()))
+			se = float(ConverFromComma(self.ui.lineEdit_10.text()))
+			alpha = float(ConverFromComma(self.ui.lineEdit_11.text()))
 			t = float( t_min * ( (se / s_min) ** alpha ) )
-			self.ui.lineEdit_12.setText(str("%.5f" % t))
+			self.ui.lineEdit_12.setText(str("%.2f" % t))
 			self.sig.my_signal.emit(9, t)
 		except Exception as e:
 			print(str(e))
+
 
 
 
@@ -158,7 +164,7 @@ class countingMethodForm(QtWidgets.QMainWindow):
 				return
 			
 			tn = float((a1 * math.sqrt(c)) + (a2 * c)) 
-			self.ui.lineEdit.setText(str("%.5f" % tn))
+			self.ui.lineEdit.setText(str("%.2f" % tn))
 			self.sig.my_signal.emit(10, tn)
 		except Exception as e:
 			print(str(e))
@@ -201,17 +207,19 @@ class analogForm(QtWidgets.QMainWindow):
 
 	def RequesKoef(self, val, rez):
 		if val==8:
-			self.ui.lineEdit_2.setText(str(rez))
+			self.ui.lineEdit_2.setText(str("%.2f" % rez))
 		if val==9:
-			self.ui.lineEdit_3.setText(str(rez))
+			self.ui.lineEdit_3.setText(str("%.2f" % rez))
 		if val==10:
-			self.ui.lineEdit_4.setText(str(rez))
+			self.ui.lineEdit_4.setText(str("%.2f" % rez))
 
 
 	def HarChecked(self):
 		self.ui.textEdit.setText("")
 		if self.ui.har_1.checkState():
 			self.ui.textEdit.append(self.ui.har_1.text())
+			if self.ui.pl_1.checkState():
+				
 
 		if self.ui.har_2.checkState():
 			self.ui.textEdit.append(self.ui.har_2.text())
@@ -328,8 +336,8 @@ class climateZoneForm(QtWidgets.QMainWindow):
 			self.signal.my_signal.emit(3, float(self.ui.lineEdit_3.text()))
 			self.signal.my_signal.emit(4, float(self.KoefSejsm))
 			self.close()
-		except:
-			pass
+		except Exception as e:
+			print(str(e))
 		
 
 	def ChangeKoefSejsm(self, statCheck):
@@ -350,21 +358,27 @@ class climateZoneForm(QtWidgets.QMainWindow):
 	def ChangeKoef1(self, statCheck):
 		if self.ui.checkBox.checkState():
 			try:
-				self.CheckValues()
+				self.listKoef["koef1"] = float(ConverFromComma(self.ui.lineEdit_4.text()))
 				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
 			except Exception as e:
 				print(str(e))
 				self.ui.lineEdit_4.setText("")
-
+		else:
+			if 'koef1' in self.listKoef.keys():
+				del self.listKoef["koef1"]
 
 	def ChangeKoef2(self, statCheck):
 		if self.ui.checkBox_2.checkState():
 			try:
-				self.CheckValues()
+				self.listKoef["koef2"] = float(ConverFromComma(self.ui.lineEdit_2.text()))
 				print(self.listKoef)
 				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
 			except:
 				self.ui.lineEdit_2.setText("")
+		else:
+			if 'koef2' in self.listKoef.keys():
+				del self.listKoef["koef2"]
+
 
 
 	def ChangeLongBuilding(self, k):
@@ -372,22 +386,25 @@ class climateZoneForm(QtWidgets.QMainWindow):
 			radiobutton = self.sender()
 			try:
 				self.ui.lineEdit.setText(radiobutton.text())
-				self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
-				self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
+				if self.ui.checkBox.checkState():
+					self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
+				if self.ui.checkBox_2.checkState():
+					self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
+				
 				self.listKoef["koef3"] = float(radiobutton.text())
 				print(self.listKoef)
 				self.ui.lineEdit_3.setText(str(max(self.listKoef.values())))
 			except:
 				self.ui.lineEdit_3.setText("")
+				QtWidgets.QMessageBox.about(self, "Ошибка", "Введите значение")
 
-
-	def CheckValues(self):
-		try:
-			self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
-			self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
-			self.listKoef["koef3"] = float(self.ui.lineEdit.text())
-		except Exception as e:
-			print(str(e))
+	# def CheckValues(self):
+	# 	try:
+	# 		self.listKoef["koef1"] = float(self.ui.lineEdit_4.text())
+	# 		self.listKoef["koef2"] = float(self.ui.lineEdit_2.text())
+	# 		self.listKoef["koef3"] = float(self.ui.lineEdit.text())
+	# 	except Exception as e:
+	# 		print(str(e))
 
 
 
