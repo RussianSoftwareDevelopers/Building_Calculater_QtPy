@@ -228,13 +228,21 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.pushButton_6.clicked.connect(self.calculate)
 
 	def calculate(self):
-		result = 0
+		result = 1
+		print(SaveValues.listkoef)
 		for k in SaveValues.listkoef:
 			if k != 0:
 				result = result*k
-
 		
+		sum =	self.toFloat(self.ui.lineEdit_6.text()) + self.toFloat(self.ui.lineEdit_2.text()) + self.toFloat(self.ui.lineEdit_3.text()) + self.toFloat(self.ui.lineEdit_4.text()) 	
+		self.ui.lineEdit_7.setText(str("%.2f" % (sum*result)))
 
+
+	def toFloat(self, text):
+		try:
+			return float(ConverFromComma(text))
+		except:
+			return 0
 
 
 
@@ -519,7 +527,7 @@ class mainForm(QtWidgets.QMainWindow):
 		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_6.text()))
 		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_8.text()))
 		SaveValues.listkoef.append(self.toFloat(self.ui.label_7.text()))
-
+		print(SaveValues.listkoef)
 		#SaveValues.pku = self.toFloat(self.ui.lineEdit_4.text())
 		#SaveValues.sejs = self.toFloat(self.ui.lineEdit_5.text())
 		#SaveValues.objlitemk = self.toFloat(self.ui.lineEdit_6.text())
