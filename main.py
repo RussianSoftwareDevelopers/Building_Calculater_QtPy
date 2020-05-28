@@ -228,7 +228,14 @@ class analogForm(QtWidgets.QMainWindow):
 		self.ui.pushButton_6.clicked.connect(self.calculate)
 
 	def calculate(self):
-		print("calculate")
+		result = 0
+		for k in SaveValues.listkoef:
+			if k != 0:
+				result = result*k
+
+		
+
+
 
 
 	def cb_changed(self, index):
@@ -304,6 +311,7 @@ class SaveValues(object):
 	p = 0
 	intepolyatsya = 0
 
+	listkoef = []
 	pku = 0
 	sejs = 0
 	objlitemk = 0
@@ -504,12 +512,19 @@ class mainForm(QtWidgets.QMainWindow):
 	def btnClickOk(self):	
 		self.name1 = self.ui.lineEdit.text()
 		self.place = self.ui.lineEdit_2.text()
-		
-		SaveValues.pku = self.toFloat(self.ui.lineEdit_4.text())
-		SaveValues.sejs = self.toFloat(self.ui.lineEdit_5.text())
-		SaveValues.objlitemk = self.toFloat(self.ui.lineEdit_6.text())
-		SaveValues.objblockmet = self.toFloat(self.ui.lineEdit_8.text())
-		SaveValues.smennost = self.toFloat(self.ui.label_7.text())
+		SaveValues.listkoef = [] 
+
+		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_4.text()))
+		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_5.text()))
+		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_6.text()))
+		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_8.text()))
+		SaveValues.listkoef.append(self.toFloat(self.ui.label_7.text()))
+
+		#SaveValues.pku = self.toFloat(self.ui.lineEdit_4.text())
+		#SaveValues.sejs = self.toFloat(self.ui.lineEdit_5.text())
+		#SaveValues.objlitemk = self.toFloat(self.ui.lineEdit_6.text())
+		#SaveValues.objblockmet = self.toFloat(self.ui.lineEdit_8.text())
+		#SaveValues.smennost = self.toFloat(self.ui.label_7.text())
 
 		
 
