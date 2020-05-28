@@ -13,6 +13,7 @@ def ConverFromComma(val):
 	else:
 		return val
 
+
 class technologyForm(QtWidgets.QMainWindow):
 	"""
 	Класс отвечает за окно приложения "Технология строительства"
@@ -87,7 +88,6 @@ class technologyForm(QtWidgets.QMainWindow):
 		self.close()
 
 
-
 class mathOperationsForm(QtWidgets.QMainWindow):
 	"""
 	Класс отвечает за окно "Вычисления"
@@ -112,7 +112,6 @@ class mathOperationsForm(QtWidgets.QMainWindow):
 	def changeS(self):
 		try:
 			SaveValues.p = float(ConverFromComma(self.sender().text()))
-
 		except:
 			pass
 
@@ -245,7 +244,6 @@ class analogForm(QtWidgets.QMainWindow):
 			return 0
 
 
-
 	def cb_changed(self, index):
 		self.ui.label_3.setText(self.sender().currentText())
 		print(index)
@@ -282,7 +280,6 @@ class analogForm(QtWidgets.QMainWindow):
 		else:
 			self.ui.label_8.setText("")
 
-
 		if self.ui.har_2.checkState():
 			self.ui.textEdit.append(self.ui.har_2.text())
 
@@ -311,7 +308,7 @@ class analogForm(QtWidgets.QMainWindow):
 	def CountBuildingLong(self):
 		try:
 			result = float(ConverFromComma(self.ui.lineEdit_5.text())) / 30
-			self.ui.lineEdit_6.setText(str(result))
+			self.ui.lineEdit_6.setText(str("%.2f" % result))
 		except:
 			QtWidgets.QMessageBox.about(self, "Ошибка", "Введите число")
 
@@ -326,7 +323,6 @@ class SaveValues(object):
 	objlitemk = 0
 	objblockmet = 0
 	smennost = 0
-
 
 
 class ChangeSqare(object):
@@ -348,7 +344,6 @@ class ChangeSqare(object):
 	@square.deleter
 	def Delsquare(self):			# Удаление
 		del self.__square
-
 
 
 class afterOkForm(QtWidgets.QMainWindow):
@@ -380,7 +375,6 @@ class afterOkForm(QtWidgets.QMainWindow):
 	def openAnalogForm(self):
 		self.af = analogForm()
 		self.af.show()	
-
 
 
 class climateZoneForm(QtWidgets.QMainWindow):	
@@ -450,6 +444,7 @@ class climateZoneForm(QtWidgets.QMainWindow):
 			if 'koef1' in self.listKoef.keys():
 				del self.listKoef["koef1"]
 
+
 	def ChangeKoef2(self, statCheck):
 		if self.ui.checkBox_2.checkState():
 			try:
@@ -461,7 +456,6 @@ class climateZoneForm(QtWidgets.QMainWindow):
 		else:
 			if 'koef2' in self.listKoef.keys():
 				del self.listKoef["koef2"]
-
 
 
 	def ChangeLongBuilding(self, k):
@@ -482,14 +476,12 @@ class climateZoneForm(QtWidgets.QMainWindow):
 				QtWidgets.QMessageBox.about(self, "Ошибка", "Введите значение")
 
 
-
 class MyWidget(QtWidgets.QWidget):
     my_signal = QtCore.pyqtSignal(int, float)
  
     def __init__(self):
         super(MyWidget, self).__init__()
 
-     
 
 class mainForm(QtWidgets.QMainWindow):
 	""" 
@@ -529,11 +521,6 @@ class mainForm(QtWidgets.QMainWindow):
 		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_8.text()))
 		SaveValues.listkoef.append(self.toFloat(self.ui.label_7.text()))
 		print(SaveValues.listkoef)
-		#SaveValues.pku = self.toFloat(self.ui.lineEdit_4.text())
-		#SaveValues.sejs = self.toFloat(self.ui.lineEdit_5.text())
-		#SaveValues.objlitemk = self.toFloat(self.ui.lineEdit_6.text())
-		#SaveValues.objblockmet = self.toFloat(self.ui.lineEdit_8.text())
-		#SaveValues.smennost = self.toFloat(self.ui.label_7.text())
 		
 		self.afterok = afterOkForm(self.name1, self.place)
 		self.afterok.show()
