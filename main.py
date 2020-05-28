@@ -234,7 +234,7 @@ class analogForm(QtWidgets.QMainWindow):
 			if k != 0:
 				result = result*k
 		
-		sum =	self.toFloat(self.ui.lineEdit_6.text()) + self.toFloat(self.ui.lineEdit_2.text()) + self.toFloat(self.ui.lineEdit_3.text()) + self.toFloat(self.ui.lineEdit_4.text()) 	
+		sum = self.toFloat(self.ui.lineEdit_6.text()) + self.toFloat(self.ui.lineEdit_2.text()) + self.toFloat(self.ui.lineEdit_3.text()) + self.toFloat(self.ui.lineEdit_4.text()) 	
 		self.ui.lineEdit_7.setText(str("%.2f" % (sum*result)))
 
 
@@ -310,10 +310,11 @@ class analogForm(QtWidgets.QMainWindow):
 
 	def CountBuildingLong(self):
 		try:
-			result = float(ConverFromComma(self.ui.lineEdit_5.text())) / 10
+			result = float(ConverFromComma(self.ui.lineEdit_5.text())) / 30
 			self.ui.lineEdit_6.setText(str(result))
 		except:
 			QtWidgets.QMessageBox.about(self, "Ошибка", "Введите число")
+
 
 class SaveValues(object):
 	p = 0
@@ -533,10 +534,7 @@ class mainForm(QtWidgets.QMainWindow):
 		#SaveValues.objlitemk = self.toFloat(self.ui.lineEdit_6.text())
 		#SaveValues.objblockmet = self.toFloat(self.ui.lineEdit_8.text())
 		#SaveValues.smennost = self.toFloat(self.ui.label_7.text())
-
 		
-
-
 		self.afterok = afterOkForm(self.name1, self.place)
 		self.afterok.show()
 
