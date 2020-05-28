@@ -519,7 +519,7 @@ class mainForm(QtWidgets.QMainWindow):
 		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_5.text()))
 		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_6.text()))
 		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_8.text()))
-		SaveValues.listkoef.append(self.toFloat(self.ui.label_7.text()))
+		SaveValues.listkoef.append(self.toFloat(self.ui.lineEdit_7.text()))
 		print(SaveValues.listkoef)
 		
 		self.afterok = afterOkForm(self.name1, self.place)
