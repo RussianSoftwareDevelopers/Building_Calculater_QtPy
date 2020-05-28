@@ -307,7 +307,7 @@ class analogForm(QtWidgets.QMainWindow):
 
 	def CountBuildingLong(self):
 		try:
-			result = float(ConverFromComma(self.ui.lineEdit_5.text())) / 30
+			result = float(ConverFromComma(self.ui.lineEdit_5.text())) / 300
 			self.ui.lineEdit_6.setText(str("%.2f" % result))
 		except:
 			QtWidgets.QMessageBox.about(self, "Ошибка", "Введите число")
